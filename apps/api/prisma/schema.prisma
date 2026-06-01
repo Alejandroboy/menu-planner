@@ -1,0 +1,98 @@
+// This is your Prisma schema file
+// Generated from Access database db2_15.accdb
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Unit {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique @db.VarChar(50)
+  gramsPerUnit Float?      // conversion factor to grams (null if not applicable)
+  ingredients Ingredient[]
+
+  @@map("units")
+}
+
+model ProcessingType {
+  id                Int                @id @default(autoincrement())
+  name              String             @unique @db.VarChar(50)
+  recipeIngredients RecipeIngredient[]
+
+  @@map("processing_types")
+}
+
+model Ingredient {
+  id               Int                @id @default(autoincrement())
+  name             String             @db.VarChar(100)
+  unitId           Int
+  unit             Unit               @relation(fields: [unitId], references: [id])
+  gramsPerUnit     Float              @default(1)  // how many grams in 1 unit (e.g. 1000 for kg)
+  lossCold         Float              @default(1)  // cold processing retention coefficient (0..1, >1 means weight gain e.g. pasta)
+  lossFry          Float              @default(1)
+  lossBoil         Float              @default(1)
+  lossBake         Float              @default(1)
+  recipeIngredients RecipeIngredient[]
+
+  @@map("ingredients")
+}
+
+model Recipe {
+  id              Int                @id @default(autoincrement())
+  name            String             @db.VarChar(255)
+  portionWeightG  Int?               // weight of one portion in grams
+  defaultServings Int                @default(1)
+  description     String?            @db.Text
+  ingredients     RecipeIngredient[]
+  menuItems       MenuPlanItem[]
+
+  @@map("recipes")
+}
+
+model RecipeIngredient {
+  id                  Int            @id @default(autoincrement())
+  recipeId            Int
+  recipe              Recipe         @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredientId        Int
+  ingredient          Ingredient     @relation(fields: [ingredientId], references: [id])
+  grossWeightG        Int            // weight before processing (brutto)
+  applyColdProcessing Boolean        @default(true)
+  processingTypeId    Int
+  processingType      ProcessingType @relation(fields: [processingTypeId], references: [id])
+
+  @@map("recipe_ingredients")
+}
+
+model MenuPlan {
+  id        Int            @id @default(autoincrement())
+  name      String         @db.VarChar(255)
+  date      DateTime       @db.Date
+  items     MenuPlanItem[]
+
+  @@map("menu_plans")
+}
+
+model MenuPlanItem {
+  id        Int       @id @default(autoincrement())
+  menuPlanId Int
+  menuPlan  MenuPlan  @relation(fields: [menuPlanId], references: [id], onDelete: Cascade)
+  recipeId  Int
+  recipe    Recipe    @relation(fields: [recipeId], references: [id])
+  mealType  MealType?
+  servings  Int
+
+  @@map("menu_plan_items")
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+
+  @@map("meal_type")
+}
