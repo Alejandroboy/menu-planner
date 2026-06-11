@@ -1,7 +1,14 @@
 import { useIngredient } from '@/api/use-ingredient.hook';
+import { RecipeIngredient } from '@/api/types';
+import { processingTypeHelper } from '@/api/processing-type-helper';
 
-export const SmallIngredient = ({ id }: { id: number }) => {
-  const { data, isLoading, error } = useIngredient(id);
+export const SmallIngredient = ({
+  ingredientId,
+  applyColdProcessing,
+  grossWeightG,
+  processingTypeId,
+}: RecipeIngredient) => {
+  const { data, isLoading, error } = useIngredient(ingredientId);
 
   if (isLoading) {
     return 'Loading...';
@@ -11,5 +18,12 @@ export const SmallIngredient = ({ id }: { id: number }) => {
     return `Error: ${error.message}`;
   }
 
-  return <div className="p-2 border rounded-md w-fit">{data.name}</div>;
+  return (
+    <div className="p-2 border rounded-md w-fit">
+      <div>{data.name}</div>
+      <div>Холодная обработка - {applyColdProcessing ? 'Да' : 'Нет'}</div>
+      <div>Способ обработки - {processingTypeHelper(processingTypeId)}</div>
+      <div>Вес брутто - {grossWeightG} гр.</div>
+    </div>
+  );
 };

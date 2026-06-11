@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RecipesIndexRouteImport } from './routes/recipes.index'
 import { Route as MenuPlansIndexRouteImport } from './routes/menu-plans.index'
 import { Route as IngredientsIndexRouteImport } from './routes/ingredients.index'
-import { Route as RecipesUpdateRouteImport } from './routes/recipes.update'
 import { Route as RecipesNewRouteImport } from './routes/recipes.new'
 import { Route as RecipesRecipeIdRouteImport } from './routes/recipes.$recipeId'
 import { Route as MenuPlansNewRouteImport } from './routes/menu-plans.new'
@@ -21,7 +20,9 @@ import { Route as MenuPlansMenuPlanIdRouteImport } from './routes/menu-plans.$me
 import { Route as IngredientsNewRouteImport } from './routes/ingredients.new'
 import { Route as IngredientsIngredientIdRouteImport } from './routes/ingredients.$ingredientId'
 import { Route as RecipesRecipeIdUpdateRouteImport } from './routes/recipes_.$recipeId.update'
+import { Route as RecipesRecipeIdItemRouteImport } from './routes/recipes_.$recipeId.item'
 import { Route as MenuPlansMenuPlanIdUpdateRouteImport } from './routes/menu-plans_.$menuPlanId.update'
+import { Route as MenuPlansMenuPlanIdItemRouteImport } from './routes/menu-plans_.$menuPlanId.item'
 import { Route as IngredientsIngredientIdUpdateRouteImport } from './routes/ingredients_.$ingredientId.update'
 
 const IndexRoute = IndexRouteImport.update({
@@ -42,11 +43,6 @@ const MenuPlansIndexRoute = MenuPlansIndexRouteImport.update({
 const IngredientsIndexRoute = IngredientsIndexRouteImport.update({
   id: '/ingredients/',
   path: '/ingredients/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecipesUpdateRoute = RecipesUpdateRouteImport.update({
-  id: '/recipes/update',
-  path: '/recipes/update',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecipesNewRoute = RecipesNewRouteImport.update({
@@ -84,12 +80,22 @@ const RecipesRecipeIdUpdateRoute = RecipesRecipeIdUpdateRouteImport.update({
   path: '/recipes/$recipeId/update',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecipesRecipeIdItemRoute = RecipesRecipeIdItemRouteImport.update({
+  id: '/recipes_/$recipeId/item',
+  path: '/recipes/$recipeId/item',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MenuPlansMenuPlanIdUpdateRoute =
   MenuPlansMenuPlanIdUpdateRouteImport.update({
     id: '/menu-plans_/$menuPlanId/update',
     path: '/menu-plans/$menuPlanId/update',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MenuPlansMenuPlanIdItemRoute = MenuPlansMenuPlanIdItemRouteImport.update({
+  id: '/menu-plans_/$menuPlanId/item',
+  path: '/menu-plans/$menuPlanId/item',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IngredientsIngredientIdUpdateRoute =
   IngredientsIngredientIdUpdateRouteImport.update({
     id: '/ingredients_/$ingredientId/update',
@@ -105,12 +111,13 @@ export interface FileRoutesByFullPath {
   '/menu-plans/new': typeof MenuPlansNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/new': typeof RecipesNewRoute
-  '/recipes/update': typeof RecipesUpdateRoute
   '/ingredients/': typeof IngredientsIndexRoute
   '/menu-plans/': typeof MenuPlansIndexRoute
   '/recipes/': typeof RecipesIndexRoute
   '/ingredients/$ingredientId/update': typeof IngredientsIngredientIdUpdateRoute
+  '/menu-plans/$menuPlanId/item': typeof MenuPlansMenuPlanIdItemRoute
   '/menu-plans/$menuPlanId/update': typeof MenuPlansMenuPlanIdUpdateRoute
+  '/recipes/$recipeId/item': typeof RecipesRecipeIdItemRoute
   '/recipes/$recipeId/update': typeof RecipesRecipeIdUpdateRoute
 }
 export interface FileRoutesByTo {
@@ -121,12 +128,13 @@ export interface FileRoutesByTo {
   '/menu-plans/new': typeof MenuPlansNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/new': typeof RecipesNewRoute
-  '/recipes/update': typeof RecipesUpdateRoute
   '/ingredients': typeof IngredientsIndexRoute
   '/menu-plans': typeof MenuPlansIndexRoute
   '/recipes': typeof RecipesIndexRoute
   '/ingredients/$ingredientId/update': typeof IngredientsIngredientIdUpdateRoute
+  '/menu-plans/$menuPlanId/item': typeof MenuPlansMenuPlanIdItemRoute
   '/menu-plans/$menuPlanId/update': typeof MenuPlansMenuPlanIdUpdateRoute
+  '/recipes/$recipeId/item': typeof RecipesRecipeIdItemRoute
   '/recipes/$recipeId/update': typeof RecipesRecipeIdUpdateRoute
 }
 export interface FileRoutesById {
@@ -138,12 +146,13 @@ export interface FileRoutesById {
   '/menu-plans/new': typeof MenuPlansNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/new': typeof RecipesNewRoute
-  '/recipes/update': typeof RecipesUpdateRoute
   '/ingredients/': typeof IngredientsIndexRoute
   '/menu-plans/': typeof MenuPlansIndexRoute
   '/recipes/': typeof RecipesIndexRoute
   '/ingredients_/$ingredientId/update': typeof IngredientsIngredientIdUpdateRoute
+  '/menu-plans_/$menuPlanId/item': typeof MenuPlansMenuPlanIdItemRoute
   '/menu-plans_/$menuPlanId/update': typeof MenuPlansMenuPlanIdUpdateRoute
+  '/recipes_/$recipeId/item': typeof RecipesRecipeIdItemRoute
   '/recipes_/$recipeId/update': typeof RecipesRecipeIdUpdateRoute
 }
 export interface FileRouteTypes {
@@ -156,12 +165,13 @@ export interface FileRouteTypes {
     | '/menu-plans/new'
     | '/recipes/$recipeId'
     | '/recipes/new'
-    | '/recipes/update'
     | '/ingredients/'
     | '/menu-plans/'
     | '/recipes/'
     | '/ingredients/$ingredientId/update'
+    | '/menu-plans/$menuPlanId/item'
     | '/menu-plans/$menuPlanId/update'
+    | '/recipes/$recipeId/item'
     | '/recipes/$recipeId/update'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -172,12 +182,13 @@ export interface FileRouteTypes {
     | '/menu-plans/new'
     | '/recipes/$recipeId'
     | '/recipes/new'
-    | '/recipes/update'
     | '/ingredients'
     | '/menu-plans'
     | '/recipes'
     | '/ingredients/$ingredientId/update'
+    | '/menu-plans/$menuPlanId/item'
     | '/menu-plans/$menuPlanId/update'
+    | '/recipes/$recipeId/item'
     | '/recipes/$recipeId/update'
   id:
     | '__root__'
@@ -188,12 +199,13 @@ export interface FileRouteTypes {
     | '/menu-plans/new'
     | '/recipes/$recipeId'
     | '/recipes/new'
-    | '/recipes/update'
     | '/ingredients/'
     | '/menu-plans/'
     | '/recipes/'
     | '/ingredients_/$ingredientId/update'
+    | '/menu-plans_/$menuPlanId/item'
     | '/menu-plans_/$menuPlanId/update'
+    | '/recipes_/$recipeId/item'
     | '/recipes_/$recipeId/update'
   fileRoutesById: FileRoutesById
 }
@@ -205,12 +217,13 @@ export interface RootRouteChildren {
   MenuPlansNewRoute: typeof MenuPlansNewRoute
   RecipesRecipeIdRoute: typeof RecipesRecipeIdRoute
   RecipesNewRoute: typeof RecipesNewRoute
-  RecipesUpdateRoute: typeof RecipesUpdateRoute
   IngredientsIndexRoute: typeof IngredientsIndexRoute
   MenuPlansIndexRoute: typeof MenuPlansIndexRoute
   RecipesIndexRoute: typeof RecipesIndexRoute
   IngredientsIngredientIdUpdateRoute: typeof IngredientsIngredientIdUpdateRoute
+  MenuPlansMenuPlanIdItemRoute: typeof MenuPlansMenuPlanIdItemRoute
   MenuPlansMenuPlanIdUpdateRoute: typeof MenuPlansMenuPlanIdUpdateRoute
+  RecipesRecipeIdItemRoute: typeof RecipesRecipeIdItemRoute
   RecipesRecipeIdUpdateRoute: typeof RecipesRecipeIdUpdateRoute
 }
 
@@ -242,13 +255,6 @@ declare module '@tanstack/react-router' {
       path: '/ingredients'
       fullPath: '/ingredients/'
       preLoaderRoute: typeof IngredientsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recipes/update': {
-      id: '/recipes/update'
-      path: '/recipes/update'
-      fullPath: '/recipes/update'
-      preLoaderRoute: typeof RecipesUpdateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recipes/new': {
@@ -300,11 +306,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecipesRecipeIdUpdateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recipes_/$recipeId/item': {
+      id: '/recipes_/$recipeId/item'
+      path: '/recipes/$recipeId/item'
+      fullPath: '/recipes/$recipeId/item'
+      preLoaderRoute: typeof RecipesRecipeIdItemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/menu-plans_/$menuPlanId/update': {
       id: '/menu-plans_/$menuPlanId/update'
       path: '/menu-plans/$menuPlanId/update'
       fullPath: '/menu-plans/$menuPlanId/update'
       preLoaderRoute: typeof MenuPlansMenuPlanIdUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/menu-plans_/$menuPlanId/item': {
+      id: '/menu-plans_/$menuPlanId/item'
+      path: '/menu-plans/$menuPlanId/item'
+      fullPath: '/menu-plans/$menuPlanId/item'
+      preLoaderRoute: typeof MenuPlansMenuPlanIdItemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ingredients_/$ingredientId/update': {
@@ -325,12 +345,13 @@ const rootRouteChildren: RootRouteChildren = {
   MenuPlansNewRoute: MenuPlansNewRoute,
   RecipesRecipeIdRoute: RecipesRecipeIdRoute,
   RecipesNewRoute: RecipesNewRoute,
-  RecipesUpdateRoute: RecipesUpdateRoute,
   IngredientsIndexRoute: IngredientsIndexRoute,
   MenuPlansIndexRoute: MenuPlansIndexRoute,
   RecipesIndexRoute: RecipesIndexRoute,
   IngredientsIngredientIdUpdateRoute: IngredientsIngredientIdUpdateRoute,
+  MenuPlansMenuPlanIdItemRoute: MenuPlansMenuPlanIdItemRoute,
   MenuPlansMenuPlanIdUpdateRoute: MenuPlansMenuPlanIdUpdateRoute,
+  RecipesRecipeIdItemRoute: RecipesRecipeIdItemRoute,
   RecipesRecipeIdUpdateRoute: RecipesRecipeIdUpdateRoute,
 }
 export const routeTree = rootRouteImport

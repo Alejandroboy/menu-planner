@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/api/client';
 import { useNavigate } from '@tanstack/react-router';
-import { Ingredient, Recipe } from '@/api/types';
+import { MutationType, Recipe } from '@/api/types';
+import { api } from '@/api/client';
 
-export const useCreateRecipe = () => {
+export const useCreateOrUpdateRecipe = (type: MutationType, recipeId?: number) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -18,10 +18,18 @@ export const useCreateRecipe = () => {
       portionWeightG: number;
       defaultServings: number;
       description: string | null;
-    }) =>
-      api
-        .post(`/recipes/`, { description, name, defaultServings, portionWeightG })
-        .then((r) => r.data),
+    }) => {
+      if (type === MutationType.CREATE) {
+        return api
+          .post(`/recipes/`, { description, name, defaultServings, portionWeightG })
+          .then((r) => r.data);
+      }
+      if (type === MutationType.UPDATE) {
+        return api
+          .patch(`/recipes/${recipeId}`, { description, name, defaultServings, portionWeightG })
+          .then((r) => r.data);
+      }
+    },
 
     onSuccess: (recipe: Recipe) => {
       queryClient.invalidateQueries({ queryKey: ['recipes'] });

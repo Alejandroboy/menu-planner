@@ -36,7 +36,12 @@ export class RecipesController {
   }
 
   @Post(':id/ingredients')
-  addIngredients(@Param('id', ParseIntPipe) id: number, @Body() dtos: AddRecipeIngredientDto[]) {
-    return this.recipesService.addIngredients(id, dtos);
+  addIngredient(@Param('id', ParseIntPipe) id: number, @Body() dto: AddRecipeIngredientDto) {
+    return this.recipesService.addIngredient(id, dto);
+  }
+
+  @Delete(':id/ingredients/:ingredientId')
+  deleteIngredient(@Param('ingredientId', ParseIntPipe) ingredientId: number) {
+    return this.recipesService.deleteIngredient(ingredientId);
   }
 }

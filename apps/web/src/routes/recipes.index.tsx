@@ -3,10 +3,10 @@ import { useRecipes } from '@/api/use-recipes.hook';
 import { useDeleteRecipe } from '@/api/use-delete-recipe.hook';
 
 export const Route = createFileRoute('/recipes/')({
-  component: RecipesComponent,
+  component: RecipesPage,
 });
 
-function RecipesComponent() {
+function RecipesPage() {
   const { data, isLoading, error } = useRecipes();
   const mutation = useDeleteRecipe();
 

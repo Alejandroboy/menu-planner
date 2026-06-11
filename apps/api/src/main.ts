@@ -4,6 +4,10 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import {
+  PrismaExceptionFilter,
+  PrismaValidationExceptionFilter,
+} from '@/prisma/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -22,6 +26,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Exceptions
+  app.useGlobalFilters(new PrismaExceptionFilter(), new PrismaValidationExceptionFilter());
 
   // CORS
   app.enableCors({

@@ -45,12 +45,15 @@ export class RecipesService {
     return this.prismaService.recipe.delete({ where: { id } });
   }
 
-  async addIngredients(recipeId: number, dtos: AddRecipeIngredientDto[]) {
-    return this.prismaService.$transaction([
-      this.prismaService.recipeIngredient.deleteMany({ where: { recipeId } }),
-      this.prismaService.recipeIngredient.createMany({
-        data: dtos.map((dto) => ({ ...dto, recipeId })),
-      }),
-    ]);
+  async addIngredient(recipeId: number, dto: AddRecipeIngredientDto) {
+    return this.prismaService.recipeIngredient.create({
+      data: { ...dto, recipeId },
+    });
+  }
+
+  async deleteIngredient(id: number) {
+    return this.prismaService.recipeIngredient.delete({
+      where: { id },
+    });
   }
 }

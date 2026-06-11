@@ -27,38 +27,35 @@ export class ShoppingService {
     if (!plan) {
       throw new NotFoundException(`No plan found with id ${menuPlanId}`);
     }
-    console.log('>>>>>>>>>>> plan <<<<<<<<<<<', plan);
-    console.log('>>>>>>>>>>> plan.items <<<<<<<<<<<', plan.items);
-    console.log('>>>>>>>>>>> plan.items[0].recipe <<<<<<<<<<<', plan.items[0].recipe);
     const totals = new Map<number, { name: string; grams: number; unit: string }>();
 
     for (const item of plan.items) {
-      for (const ingridient of item.recipe.ingredients) {
-        let grams = ingridient.grossWeightG * item.servings;
+      for (const ingredient of item.recipe.ingredients) {
+        let grams = ingredient.grossWeightG * item.servings;
 
-        if (ingridient.applyColdProcessing) {
-          grams *= ingridient.ingredient.lossCold;
+        if (ingredient.applyColdProcessing) {
+          grams *= ingredient.ingredient.lossCold;
         }
 
-        switch (ingridient.processingTypeId) {
+        switch (ingredient.processingTypeId) {
           case 2:
-            grams *= ingridient.ingredient.lossBoil;
+            grams *= ingredient.ingredient.lossBoil;
             break;
           case 3:
-            grams *= ingridient.ingredient.lossFry;
+            grams *= ingredient.ingredient.lossFry;
             break;
           case 4:
-            grams *= ingridient.ingredient.lossBake;
+            grams *= ingredient.ingredient.lossBake;
         }
 
-        const existing = totals.get(ingridient.ingredientId);
+        const existing = totals.get(ingredient.ingredientId);
         if (existing) {
           existing.grams += grams;
         } else {
-          totals.set(ingridient.ingredientId, {
-            name: ingridient.ingredient.name,
+          totals.set(ingredient.ingredientId, {
+            name: ingredient.ingredient.name,
             grams: Math.round(grams),
-            unit: ingridient.ingredient.unit.name,
+            unit: ingredient.ingredient.unit.name,
           });
         }
       }

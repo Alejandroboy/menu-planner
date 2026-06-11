@@ -3,9 +3,6 @@ import { MealType } from '@prisma/client';
 
 export class AddMenuPlanItemDto {
   @IsInt()
-  menuPlanId: number;
-
-  @IsInt()
   recipeId: number;
 
   @IsString()

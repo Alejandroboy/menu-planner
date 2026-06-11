@@ -3,10 +3,10 @@ import { useIngredient } from '@/api/use-ingredient.hook';
 import { FormIngredient } from '@/components/form-ingredient';
 
 export const Route = createFileRoute('/ingredients_/$ingredientId/update')({
-  component: RouteComponent,
+  component: IngredientUpdatePage,
 });
 
-function RouteComponent() {
+function IngredientUpdatePage() {
   const { ingredientId } = Route.useParams();
   const { data, isLoading, error } = useIngredient(Number(ingredientId));
   if (isLoading) {

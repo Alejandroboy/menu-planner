@@ -45,3 +45,22 @@ export interface Ingredient {
     gramsPerUnit: number;
   };
 }
+
+export interface ShoppingItem {
+  grams: number;
+  name: string;
+  unit: string;
+}
+
+export enum MutationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  ADD = 'add',
+}
+
+export enum MealType {
+  BREAKFAST = 'BREAKFAST',
+  LUNCH = 'LUNCH',
+  DINNER = 'DINNER',
+}

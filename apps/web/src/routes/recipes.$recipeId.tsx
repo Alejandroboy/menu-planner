@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useRecipe } from '@/api/use-recipe.hook';
 import { SmallIngredient } from '@/components/small-ingredient';
-import { Ingredient, RecipeIngredient } from '@/api/types';
+import { RecipeIngredient } from '@/api/types';
 
 export const Route = createFileRoute('/recipes/$recipeId')({
   component: RecipePage,
@@ -10,7 +10,7 @@ export const Route = createFileRoute('/recipes/$recipeId')({
 function RecipePage() {
   const { recipeId } = Route.useParams();
   const { data, isLoading, error } = useRecipe(Number(recipeId));
-  console.log('RecipePage data', data);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -18,7 +18,42 @@ function RecipePage() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-  console.log('RecipePage data', data);
+
+  function renderIngredients() {
+    if (data.ingredients.length > 0) {
+      return (
+        <div>
+          <ul className="flex flex-wrap gap-2">
+            {data.ingredients.map((ingredient: RecipeIngredient) => (
+              <li key={ingredient.id}>
+                <SmallIngredient {...ingredient} />
+              </li>
+            ))}
+          </ul>
+          <Link
+            to={'/recipes/$recipeId/item'}
+            params={{ recipeId }}
+            className="mt-[15px] p-2 border rounded-md w-fit block"
+          >
+            Добавить
+          </Link>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <div>Нет ингредиентов</div>
+        <Link
+          to={'/recipes/$recipeId/item'}
+          params={{ recipeId }}
+          className="mt-[15px] p-2 border rounded-md w-fit block"
+        >
+          Добавить
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="p-2">
@@ -39,13 +74,7 @@ function RecipePage() {
       <div>Порция: {data.portionWeightG} гр</div>
       <div>
         Ингредиенты
-        <ul className="flex flex-wrap gap-2">
-          {data.ingredients.map((ingredient: RecipeIngredient) => (
-            <li key={ingredient.id}>
-              <SmallIngredient id={ingredient.ingredientId} />
-            </li>
-          ))}
-        </ul>
+        {renderIngredients()}
       </div>
     </div>
   );
