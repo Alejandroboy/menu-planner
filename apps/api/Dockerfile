@@ -14,8 +14,9 @@ RUN yarn workspaces focus @menu-planner/api
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+RUN corepack enable
+
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
 
 COPY tsconfig.base.json ./
 COPY apps/api ./apps/api
@@ -34,7 +35,7 @@ RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nestjs
 
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/apps/api/node_modules ./node_modules
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/prisma ./prisma
 
 USER nestjs
