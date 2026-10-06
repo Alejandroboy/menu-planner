@@ -8,7 +8,7 @@ RUN corepack enable
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY apps/api/package.json ./apps/api/
 
-RUN yarn workspaces focus @menu-planner/api --production=false
+RUN yarn workspaces focus @menu-planner/api
 
 # ── Stage 2: builder ─────────────────────────────────────────
 FROM node:20-alpine AS builder
