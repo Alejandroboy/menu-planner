@@ -11,12 +11,9 @@ COPY apps/api/package.json ./apps/api/
 RUN yarn workspaces focus @menu-planner/api
 
 # ── Stage 2: builder ─────────────────────────────────────────
-FROM node:20-alpine AS builder
-WORKDIR /app
-
-RUN corepack enable
-
-COPY --from=deps /app/node_modules ./node_modules
+# Extends deps so the root package.json (packageManager pin), yarn install
+# state and node_modules are all present for `yarn <bin>` to resolve.
+FROM deps AS builder
 
 COPY tsconfig.base.json ./
 COPY apps/api ./apps/api
