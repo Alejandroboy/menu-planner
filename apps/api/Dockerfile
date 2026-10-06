@@ -2,8 +2,9 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 
-# Install yarn
-RUN corepack enable
+# Install yarn. openssl must be present before install so Prisma downloads
+# the matching (linux-musl-openssl-3.0.x) engines.
+RUN apk add --no-cache openssl && corepack enable
 
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY apps/api/package.json ./apps/api/
@@ -28,7 +29,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN addgroup --system --gid 1001 nodejs \
+RUN apk add --no-cache openssl \
+  && addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nestjs
 
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./dist
