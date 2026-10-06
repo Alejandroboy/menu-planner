@@ -6,7 +6,6 @@ RUN corepack enable
 
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY apps/web/package.json ./apps/web/
-COPY packages/ ./packages/
 
 RUN yarn workspaces focus @menu-planner/web --production=false
 
